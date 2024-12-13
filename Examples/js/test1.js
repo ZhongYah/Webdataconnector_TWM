@@ -3,19 +3,23 @@ $(document).ready(function () {
 
     myConnector.getSchema = function (schemaCallback) {
         // 定義資料欄位
-        var cols = [{
-            id: "np_stat",
-            alias: "Status",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "co_type",
-            alias: "Type",
-            dataType: tableau.dataTypeEnum.string
-        }, {
-            id: "np_stat_desc",
-            alias: "NP Status",
-            dataType: tableau.dataTypeEnum.string
-        }];
+        var cols = [
+            {
+                id: "np_stat",
+                alias: "Status",
+                dataType: tableau.dataTypeEnum.string
+            },
+            {
+                id: "co_type",
+                alias: "Type",
+                dataType: tableau.dataTypeEnum.string
+            },
+            {
+                id: "np_stat_desc",
+                alias: "NP Status",
+                dataType: tableau.dataTypeEnum.string
+            }
+        ];
 
         // 創建表格 schema 配置
         var tableSchema = {
@@ -112,16 +116,29 @@ function parseCSV(csvText) {
     const lines = csvText.split('\n'); // 根據換行符分割行
     const result = [];
 
-    // 跳過第一行標題
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line) {
-            const columns = line.split(','); // 根據逗號分割列
-            if (columns.length === 3) {
+    // // 跳過第一行標題
+    // for (let i = 1; i < lines.length; i++) {
+    //     const line = lines[i].trim();
+    //     if (line) {
+    //         const columns = line.split(','); // 根據逗號分割列
+    //         if (columns.length === 3) {
+    //             result.push({
+    //                 np_stat: columns[0],
+    //                 co_type: columns[1],
+    //                 np_stat_desc: columns[2]
+    //             });
+    //         }
+    //     }
+    // }
+
+    if (lines.length > 1) {
+        for (let i = 1; i < lines.length; i++) {
+            const columns = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if (columns && columns.length >= 2) {
                 result.push({
-                    np_stat: columns[0],
-                    co_type: columns[1],
-                    np_stat_desc: columns[2]
+                    np_stat: columns[0].replace(/"/g, ""),
+                    co_type: columns[1].replace(/"/g, ""),
+                    np_stat_desc: columns[2].replace(/"/g, ""),
                 });
             }
         }
