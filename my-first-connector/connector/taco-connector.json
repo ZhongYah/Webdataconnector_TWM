@@ -1,0 +1,12 @@
+{
+    "connectorVersion": "1.0",
+    "name": "My Connector",
+    "description": "A custom Tableau connector",
+    "handlers": {
+      "default": {
+        "module": "my-handler.js",
+        "entryPoint": "handler"
+      }
+    }
+  }
+  
