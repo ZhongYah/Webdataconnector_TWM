@@ -1,8 +1,6 @@
 $(document).ready(function () {
     var myConnector = tableau.makeConnector();
 
-    "date_nkey", "date_dkey", "yr", "yr_mn", "qtr", "mn", "day_of_mn", "day_of_wk", "wk_of_yr", "mn_end_flg", "wk_day_flg", "weekend_flg", "holiday_flg", "billing_day", "week_rng", "week_rng_tcc", "eng_mn", "mbt_bl_ym"
-
     myConnector.getSchema = function (schemaCallback) {
         // 定義資料欄位
         var cols = [
