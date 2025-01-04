@@ -34,7 +34,7 @@ $(document).ready(function () {
             console.log("Get UUID from First Request Success.");
 
             if (uuid) {
-                await delay(10000); // Wait for data to be processed
+                await delay(500); // Wait for data to be processed
 
                 const secondApiUrl = `https://twmbiqsat.com/dev/api/generalQuery/${uuid}`;
                 const secondResponse = await fetch(secondApiUrl, {
