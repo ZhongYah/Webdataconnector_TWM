@@ -8,10 +8,12 @@ $(document).ready(function () {
             console.log("User SQL Query:", sqlQuery);
 
             let cleanedQuery = cleanSQLQuery(sqlQuery);
-            console.log("Cleaned SQL Query:", cleanedQuery);
+
+            let cleanDoubleQuotes = cleanSQLDoubleQuotes(cleanedQuery);
+            console.log("Cleaned SQL Query:", cleanDoubleQuotes);
 
             // Remove LIMIT and ensure LIMIT 1 is present
-            let sanitizedQuery = ensureLimitOne(cleanedQuery);
+            let sanitizedQuery = ensureLimitOne(cleanDoubleQuotes);
             console.log("Sanitized SQL Query:", sanitizedQuery);
 
             const apiUrl = "https://twmbiqsat.com/dev/api/generalQuery";
@@ -34,7 +36,7 @@ $(document).ready(function () {
             console.log("Get UUID from First Request Success.");
 
             if (uuid) {
-                await delay(500); // Wait for data to be processed
+                await delay(3000); // Wait for data to be processed
 
                 const secondApiUrl = `https://twmbiqsat.com/dev/api/generalQuery/${uuid}`;
                 const secondResponse = await fetch(secondApiUrl, {
@@ -76,10 +78,12 @@ $(document).ready(function () {
             console.log("User SQL Query:", sqlQuery);
 
             let cleanedQuery = cleanSQLQuery(sqlQuery);
-            console.log("Cleaned SQL Query:", cleanedQuery);
+
+            let cleanDoubleQuotes = cleanSQLDoubleQuotes(cleanedQuery);
+            console.log("Cleaned SQL Query:", cleanDoubleQuotes);
 
             const apiUrl = "https://twmbiqsat.com/dev/api/generalQuery";
-            const requestData = { sql: cleanedQuery };
+            const requestData = { sql: cleanDoubleQuotes };
 
             const response = await fetch(apiUrl, {
                 method: "POST",
@@ -148,6 +152,14 @@ function cleanSQLQuery(query) {
         .replace(/--.*?(\r?\n|$)/g, "\n") // Remove comments
         .replace(/\s+/g, " ") // Replace multiple spaces with a single space
         .trim();
+}
+
+function cleanSQLDoubleQuotes(sql) {
+    // 移除整個語法前後的雙引號
+    sql = sql.replace(/^"|"$/g, '');
+    
+    // 修正欄位名稱內部的多餘雙引號
+    return sql.replace(/"{2}([^"]+?)"{2}/g, '"$1"');
 }
 
 function ensureLimitOne(query) {
